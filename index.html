@@ -3,7 +3,6 @@
 <head>
 <link rel="manifest" href="/Vehicle-inspection-V2/manifest.json">
 <link rel="icon" href="/Vehicle-inspection-V2/icon.png">
-<meta name="theme-color" content="#0f172a">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a1628">
@@ -13,6 +12,8 @@
 <meta name="application-name" content="فحص المركبات">
 <meta name="apple-mobile-web-app-title" content="فحص المركبات">
 <meta name="msapplication-TileColor" content="#0a1628">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/5tcH9ZMQ/aykwnt-khlatt-asmnt.png">
+<link rel="icon" type="image/png" href="https://i.postimg.cc/5tcH9ZMQ/aykwnt-khlatt-asmnt.png">
 <title>فحص المركبات</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" onerror="this.remove()">
@@ -1553,8 +1554,8 @@ body::before {
     <div class="card">
       <div class="card-title">معلومات المركبة</div>
       <div class="report-info-grid" style="margin-bottom: 12px;">
-        <div class="report-info-item">
-          <div class="lbl">نوع المركبة</div>
+        <div class="report-info-item tappable-info" onclick="askNewInspectionFromScreen3()" title="اضغط لتغيير نوع المركبة">
+          <div class="lbl">نوع المركبة ✏️</div>
           <div class="val" id="s3VehicleType">—</div>
         </div>
         <div class="report-info-item tappable-info" id="s3VehicleNumRow" onclick="reopenNumberPicker()" title="اضغط لتغيير الرقم">
@@ -2342,9 +2343,9 @@ function selectVehicleNumber(num) {
 function showCabinTypePicker() {
   showModal('نوع الكابينة', `
     <div style="font-size:14px;color:var(--text-muted);margin-bottom:16px;text-align:center;">اختر نوع الكابينة لهذه المركبة</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button class="btn btn-primary" style="font-size:15px;padding:16px;" onclick="confirmCabinType('سنجل كابينة')">🚐 سنجل كابينة</button>
-      <button class="btn btn-secondary" style="font-size:15px;padding:16px;" onclick="confirmCabinType('دوبل كابينة')">🚙 دوبل كابينة</button>
+    <div style="display:flex;flex-direction:row;gap:10px;">
+      <button class="btn btn-primary" style="flex:1;font-size:14px;padding:14px 8px;" onclick="confirmCabinType('سنجل كابينة')">🚐 سنجل</button>
+      <button class="btn btn-secondary" style="flex:1;font-size:14px;padding:14px 8px;" onclick="confirmCabinType('دوبل كابينة')">🚙 دوبل</button>
     </div>
   `);
 }
@@ -2358,6 +2359,17 @@ function confirmCabinType(cabinType) {
   buildStationPicker();
   showScreen(25);
 }
+function askNewInspectionFromScreen3() {
+  showModal('تغيير نوع المركبة', `
+    <div style="font-size:14px;color:var(--text);margin-bottom:8px;font-weight:700;text-align:center;">هل تريد عمل فحص جديد لنوع مركبة مختلف؟</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:18px;text-align:center;">سيتم فقدان البيانات المدخلة الحالية</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-primary" style="flex:1;font-size:13px;padding:13px 8px;" onclick="closeModal();resetAll();">نعم، فحص جديد</button>
+      <button class="btn btn-secondary" style="flex:1;font-size:13px;padding:13px 8px;" onclick="closeModal();">الاستمرار في التعديل</button>
+    </div>
+  `);
+}
+
 
 // ============================================================
 // STEP 3: DRIVER INFO → START INSPECTION
@@ -3035,12 +3047,17 @@ function buildPrintHTML() {
   .pfooter{margin-top:20px;padding-top:10px;border-top:2px solid #f5a623;text-align:center;font-size:8pt;color:#7a8fa8;}
   /* Print */
   @media print{
-    body{background:#fff;}
+    body{background:#fff !important;}
     .page{
-      width:100%;margin:0;border-radius:0;box-shadow:none;
+      width:100%;margin:0;border-radius:0;box-shadow:none !important;
       padding:12mm 10mm;
       transform:scale(1);
     }
+    /* Force colors to print */
+    .ph, .pst { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    .ph  { background:linear-gradient(135deg,#0d1e35,#1a3a5c) !important; color:#fff !important; }
+    .pst { background:linear-gradient(135deg,#b8730a,#e8891a) !important; color:#fff !important; }
+    .pi  { background:#f7f9fc !important; border-right:4px solid #f5a623 !important; }
   }
 </style>
 </head>
@@ -3127,7 +3144,13 @@ function buildReport() {
       <div class="report-info-item"><div class="lbl">نوع المركبة</div><div class="val">${state.vehicleType}</div></div>
       <div class="report-info-item"><div class="lbl">رقم المركبة</div><div class="val">${state.vehicleNumber}</div></div>
       ${state.stationName ? `<div class="report-info-item" style="grid-column:span 2"><div class="lbl">📍 المحطة</div><div class="val">${state.stationName}</div></div>` : ''}
-      ${isLoader ? `<div class="report-info-item" style="grid-column:span 2"><div class="lbl">نوع / موديل / شفرة</div><div class="val" style="font-size:12px;">${state.vehicleType} | ${state.loaderModel||'—'} | ${state.bladeType||'—'}</div></div>` : `<div class="report-info-item"><div class="lbl">نوع المركبة</div><div class="val">${state.vehicleType||'—'}</div></div><div class="report-info-item"><div class="lbl">رقم المركبة</div><div class="val">${state.vehicleNumber||'—'}</div></div>`}
+      ${isLoader ?
+        `<div class="report-info-item"><div class="lbl">نوع المركبة</div><div class="val">${state.vehicleType||'—'}</div></div>
+         <div class="report-info-item"><div class="lbl">الموديل</div><div class="val" style="font-size:12px;">${state.loaderModel||'—'}</div></div>
+         <div class="report-info-item" style="grid-column:span 2"><div class="lbl">نوع الشفرة</div><div class="val">${state.bladeType||'—'}</div></div>` :
+        `<div class="report-info-item"><div class="lbl">نوع المركبة</div><div class="val">${state.vehicleType||'—'}</div></div>
+         <div class="report-info-item"><div class="lbl">رقم المركبة</div><div class="val">${state.vehicleNumber||'—'}</div></div>`
+      }
       ${!isLoader && state.plateNumber ? `<div class="report-info-item" style="grid-column:span 2"><div class="lbl">رقم لوحة المركبة</div><div class="val" style="letter-spacing:3px;direction:ltr;font-size:16px;">${state.plateNumber}</div></div>` : ''}
       <div class="report-info-item"><div class="lbl">سائق الوردية النهارية</div><div class="val">${state.dayDriver || '—'}</div></div>
       ${!isLoader ? `<div class="report-info-item"><div class="lbl">سائق الوردية الليلية</div><div class="val">${state.nightDriver || '—'}</div></div>` : ''}
@@ -3296,35 +3319,46 @@ async function runOCR(imageDataUrl) {
   sheetEl.style.display = 'none';
   updateOcrMsg('جارٍ تحليل اللوحة...');
 
-  try {
-    // Strip data URL prefix to get raw base64
-    const base64 = imageDataUrl.replace(/^data:image\/[^;]+;base64,/, '');
+  // Extract clean base64
+  let base64 = imageDataUrl;
+  if (base64.includes(',')) base64 = base64.split(',')[1];
+  base64 = base64.replace(/[\s]/g, '');
 
-    const response = await fetch(
-      `https://vision.googleapis.com/v1/images:annotate?key=${VISION_API_KEY}`
-      ,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          requests: [{
-            image: { content: base64 },
-            features: [{ type: 'TEXT_DETECTION', maxResults: 1 }],
-            imageContext: { languageHints: ['ar', 'en'] }
-          }]
-        })
-      }
-    );
+  // Detect mime type from data URL
+  let mimeType = 'image/jpeg';
+  if (imageDataUrl.startsWith('data:image/png')) mimeType = 'image/png';
+  if (imageDataUrl.startsWith('data:image/webp')) mimeType = 'image/webp';
+
+  try {
+    updateOcrMsg('جارٍ الاتصال بـ Google Vision...');
+    const url = 'https://vision.googleapis.com/v1/images:annotate?key=' + VISION_API_KEY;
+
+    const payload = {
+      requests: [{
+        image: { content: base64 },
+        features: [{ type: 'TEXT_DETECTION', maxResults: 10 }],
+        imageContext: { languageHints: ['ar', 'ar-EG', 'en'] }
+      }]
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
     if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      const msg = err?.error?.message || `HTTP ${response.status}`;
-      throw new Error(msg);
+      const errBody = await response.text().catch(() => '');
+      console.error('Vision API error:', response.status, errBody);
+      throw new Error('HTTP ' + response.status + ': ' + errBody.substring(0, 100));
     }
 
-    const data   = await response.json();
-    const annots = data?.responses?.[0]?.textAnnotations;
+    const data = await response.json();
+    console.log('Vision response:', JSON.stringify(data).substring(0, 300));
+
+    const annots  = data?.responses?.[0]?.textAnnotations;
     const rawText = annots?.[0]?.description || '';
+    console.log('Raw OCR text:', rawText);
 
     const cleaned = parseEgyptianPlate(rawText);
     procEl.style.display   = 'none';
@@ -3332,18 +3366,21 @@ async function runOCR(imageDataUrl) {
     editEl.value           = cleaned;
     sheetEl.style.display  = 'block';
 
+    if (!cleaned) {
+      showToast('⚠️ لم يتم التعرف على نص — تحقق من وضوح الصورة');
+    }
+
   } catch (err) {
-    console.error('Vision OCR error:', err);
+    console.error('Vision OCR error:', err.message);
     procEl.style.display   = 'none';
     dispEl.textContent     = '—';
     editEl.value           = '';
     sheetEl.style.display  = 'block';
 
-    // Friendly error messages
-    if (err.message?.includes('API_KEY') || err.message?.includes('403')) {
-      showToast('⚠️ مفتاح Google Vision غير صحيح — عدّل الرقم يدوياً');
-    } else if (err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError')) {
-      showToast('⚠️ لا يوجد اتصال بالإنترنت — عدّل الرقم يدوياً');
+    if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('CORS')) {
+      showToast('⚠️ خطأ في الاتصال — افتح التطبيق من رابط HTTPS (GitHub Pages)');
+    } else if (err.message.includes('403') || err.message.includes('API_KEY')) {
+      showToast('⚠️ خطأ في مفتاح Google Vision API');
     } else {
       showToast('⚠️ تعذرت القراءة التلقائية — عدّل الرقم يدوياً');
     }
@@ -3569,8 +3606,24 @@ function showStationOtherSheet() {
 }
 
 // Called when user taps "رقم المركبة ✏️" on screen 3
+// Opens a modal sheet instead of navigating away (avoids forcing station re-selection)
 function reopenNumberPicker() {
-  showScreen(2);
+  const nums = getNumbers(state.vehicleType);
+  let gridHTML = '<div class="number-grid" id="modalNumberGrid" style="max-height:300px;overflow-y:auto;">';
+  nums.forEach(n => {
+    const isSel = n === state.vehicleNumber;
+    gridHTML += `<div class="number-btn" style="${isSel?'background:var(--accent);color:#000;border-color:var(--accent);font-weight:900;':''}"
+      onclick="selectNumberFromModal('${n}')">${n}</div>`;
+  });
+  gridHTML += '</div>';
+  showModal('اختر رقم المركبة', gridHTML);
+}
+
+function selectNumberFromModal(num) {
+  state.vehicleNumber = num;
+  document.getElementById('s3VehicleNum').textContent = num;
+  closeModal();
+  showToast('✅ تم تغيير رقم المركبة إلى: ' + num);
 }
 
 // Called when user taps "المحطة ✏️" on screen 3
@@ -3589,43 +3642,58 @@ function selectStation(name) {
 // SHARE PDF
 // ══════════════════════════════════════════════════════════════
 async function sharePDF() {
-  // Build the print HTML
+  showToast('⏳ جارٍ إنشاء PDF...');
+
+  // Build the colored print HTML
   const printHtml = buildPrintHTML();
 
-  // Try Web Share API first (mobile)
+  // Create blob URL for the HTML report
+  const blob    = new Blob([printHtml], { type: 'text/html;charset=utf-8' });
+  const blobUrl = URL.createObjectURL(blob);
+
+  // On mobile with Web Share API — share the HTML file
   if (navigator.share) {
     try {
-      // Create a Blob and File
-      const blob = new Blob([printHtml], { type: 'text/html' });
-      const file = new File([blob], `تقرير_فحص_${state.vehicleNumber || 'مركبة'}.html`, { type: 'text/html' });
+      // Try sharing as HTML file (Android supports this)
+      const fileName = `تقرير_فحص_${state.vehicleNumber || state.loaderModel || 'مركبة'}.html`;
+      const file = new File([blob], fileName, { type: 'text/html' });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
           title: 'تقرير فحص المركبة',
-          text: `تقرير فحص المركبة ${state.vehicleNumber || ''} — ${state.vehicleType || ''}`,
           files: [file]
         });
+        URL.revokeObjectURL(blobUrl);
         return;
       }
     } catch(e) {
-      if (e.name !== 'AbortError') console.warn('Share files failed:', e);
-    }
-
-    // Fallback: share URL text
-    try {
-      await navigator.share({
-        title: 'تقرير فحص المركبة',
-        text: `تقرير فحص المركبة ${state.vehicleNumber || ''} — ${state.vehicleType || ''}\n\nافتح وطبع كـ PDF`
-      });
-      return;
-    } catch(e) {
-      if (e.name === 'AbortError') return;
+      if (e.name === 'AbortError') { URL.revokeObjectURL(blobUrl); return; }
     }
   }
 
-  // Desktop fallback: open in new window for Save as PDF
-  savePDF();
-  showToast('📤 استخدم "حفظ كـ PDF" من نافذة الطباعة');
+  // Best cross-platform approach: open the report in a new window
+  // with @media print styles set to auto-trigger print dialog
+  // User can then Save as PDF (works on iOS Safari, Android Chrome, Desktop)
+  const win = window.open(blobUrl, '_blank');
+  if (win) {
+    win.addEventListener('load', () => {
+      setTimeout(() => {
+        win.focus();
+        win.print();
+        // Revoke after print dialog closes
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+      }, 600);
+    });
+    showToast('📄 اختر "حفظ كـ PDF" من حوار الطباعة');
+  } else {
+    // Popup blocked — offer download as fallback
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = `تقرير_فحص_${state.vehicleNumber || 'مركبة'}.html`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+    showToast('📥 تم تنزيل التقرير — افتحه في المتصفح وطبعه كـ PDF');
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -3677,6 +3745,27 @@ function cropSignatureCanvas(canvas) {
 // ============================================================
 // PWA + INIT
 // ============================================================
+function registerPWA() {
+  const ICON = 'https://i.postimg.cc/5tcH9ZMQ/aykwnt-khlatt-asmnt.png';
+  ['apple-touch-icon','shortcut icon'].forEach(rel => {
+    const l=document.createElement('link'); l.rel=rel; l.href=ICON;
+    document.head.appendChild(l);
+  });
+  try {
+    const manifest={
+      name:'فحص المركبات', short_name:'فحص',
+      start_url:location.href, display:'standalone',
+      orientation:'portrait-primary',
+      theme_color:'#0a1628', background_color:'#060d1a',
+      lang:'ar', dir:'rtl',
+      icons:[{src:ICON,sizes:'512x512',type:'image/png',purpose:'any maskable'}]
+    };
+    const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+    const link=document.createElement('link');
+    link.rel='manifest'; link.href=URL.createObjectURL(mBlob);
+    document.head.appendChild(link);
+  } catch(e){}
+
   if (!('serviceWorker' in navigator)) return;
   const CACHE='vehicle-inspect-v5';
   const sw=`
@@ -3726,6 +3815,7 @@ function saveVisionKey(key) {
 
 document.addEventListener('DOMContentLoaded', () => {
   showScreen(1);
+  registerPWA();
   // Load saved Vision API key
   try {
     const saved = localStorage.getItem('visionApiKey');
@@ -3783,9 +3873,9 @@ function renderEditPanel() {
     <div class="edit-info-cell tappable-info" onclick="askNewInspection();" style="cursor:pointer;">
       <div class="lbl">نوع المركبة</div><div class="val">${state.vehicleType||'—'}</div>
     </div>
-    ${ state.vehicleType!=='لودر' ? `<div class="edit-info-cell tappable-info" onclick="closeEditPanel();showScreen(2);" style="cursor:pointer;">
+    ${ state.vehicleType!=='لودر' ? `<div class="edit-info-cell tappable-info" onclick="reopenNumberPicker();" style="cursor:pointer;">
       <div class="lbl">رقم المركبة ✏️</div><div class="val">${state.vehicleNumber||'—'}</div>
-    </div>` : `<div class="edit-info-cell tappable-info" onclick="closeEditPanel();openLoaderBrandPicker();" style="cursor:pointer;">
+    </div>` : `<div class="edit-info-cell tappable-info" onclick="openLoaderBrandPicker();" style="cursor:pointer;">
       <div class="lbl">موديل اللودر ✏️</div><div class="val" style="font-size:11px;">${state.loaderModel||'—'}</div>
     </div>` }
     <div class="edit-info-cell tappable-info" style="grid-column:span 2;cursor:pointer;" onclick="closeEditPanel();reopenStationPicker();">
@@ -3895,9 +3985,9 @@ function renderEditPanel() {
   });
 
   // ── Done button ──
-  html += `<div style="display:flex;gap:8px;margin-top:14px;">
-    <button class="btn btn-primary" style="flex:1;white-space:nowrap;" onclick="finishEditing()">✅ انتهاء التعديل والذهاب للتقرير</button>
-    <button class="btn btn-secondary" style="flex:0 0 auto;padding:0 16px;white-space:nowrap;" onclick="closeEditPanel()">✕</button>
+  html += `<div style="display:flex;gap:8px;margin-top:14px;align-items:center;">
+    <button class="btn btn-primary" style="flex:1;white-space:nowrap;font-size:13px;padding:13px 10px;" onclick="finishEditing()">✅ انتهاء التعديل والذهاب للتقرير</button>
+    <button style="flex:0 0 40px;width:40px;height:44px;background:rgba(231,76,60,0.15);border:1.5px solid rgba(231,76,60,0.5);border-radius:10px;color:var(--red);font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="closeEditPanel()">✕</button>
   </div>`;
 
   document.getElementById('editPanelContent').innerHTML = html;

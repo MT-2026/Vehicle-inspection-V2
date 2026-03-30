@@ -3677,66 +3677,6 @@ function cropSignatureCanvas(canvas) {
 // ============================================================
 // PWA + INIT
 // ============================================================
-function registerPWA() {
-  const ICON = '/Vehicle-inspection-V2/icon.png';
-
-  ['apple-touch-icon', 'shortcut icon'].forEach(rel => {
-    const l = document.createElement('link');
-    l.rel = rel;
-    l.href = ICON;
-    document.head.appendChild(l);
-  });
-
-  try {
-    const manifest = {
-      id: '/Vehicle-inspection-V2',
-      name: 'فحص المركبات',
-      short_name: 'فحص',
-      description: 'تطبيق لفحص المركبات وتسجيل الملاحظات والصور والتقارير.',
-      start_url: '/Vehicle-inspection-V2/',
-      scope: '/Vehicle-inspection-V2/',
-      display: 'standalone',
-      display_override: ['standalone', 'minimal-ui'],
-      orientation: 'portrait-primary',
-      theme_color: '#0a1628',
-      background_color: '#060d1a',
-      lang: 'ar',
-      dir: 'rtl',
-      categories: ['business', 'productivity', 'utilities'],
-      prefer_related_applications: false,
-      related_applications: [],
-      iarc_rating_id: '',
-      icons: [
-        {
-          src: ICON,
-          sizes: '1700x1700',
-          type: 'image/png',
-          purpose: 'any maskable'
-        }
-      ],
-      screenshots: [
-        {
-          src: ICON,
-          sizes: '1700x1700',
-          type: 'image/png',
-          label: 'واجهة التطبيق'
-        }
-      ]
-    };
-
-    const mBlob = new Blob(
-      [JSON.stringify(manifest)],
-      { type: 'application/manifest+json' }
-    );
-
-    const link = document.createElement('link');
-    link.rel = 'manifest';
-    link.href = URL.createObjectURL(mBlob);
-    document.head.appendChild(link);
-  } catch (e) {
-    console.error(e);
-  }
-}
   if (!('serviceWorker' in navigator)) return;
   const CACHE='vehicle-inspect-v5';
   const sw=`
@@ -3786,7 +3726,6 @@ function saveVisionKey(key) {
 
 document.addEventListener('DOMContentLoaded', () => {
   showScreen(1);
-  registerPWA();
   // Load saved Vision API key
   try {
     const saved = localStorage.getItem('visionApiKey');

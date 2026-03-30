@@ -4121,6 +4121,12 @@ document.addEventListener('keydown', function(e) {
 <div id="editConfirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:7000;align-items:center;justify-content:center;padding:20px;" onclick="closeEditConfirm(event)">
   <div id="editConfirmBox" style="background:var(--bg-card);border-radius:16px;padding:22px;max-width:420px;width:100%;border:1px solid var(--border);" onclick="event.stopPropagation()">
     <div id="editConfirmContent"></div>
-
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
+</script>
 </body>
 </html>

@@ -5,10 +5,10 @@
   "description": "تطبيق لإدارة وفحص وتتبع خلاطات الأسمنت والمركبات والملاحظات والصور والتقارير حتى بدون إنترنت.",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "display_override": [
     "window-controls-overlay",
-    "standalone",
+    "fullscreen",
     "minimal-ui"
   ],
   "orientation": "portrait",
@@ -21,22 +21,22 @@
     "productivity",
     "utilities"
   ],
-  "icons": [
-    {
-      "src": "/icon.png",
-      "sizes": "1700x1700",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/icon.png",
-      "sizes": "1700x1700",
-      "type": "image/png",
-      "label": "واجهة التطبيق الرئيسية"
-    }
-  ],
+"icons": [
+  {
+    "src": "/Vehicle-inspection-V2/icon.png",
+    "sizes": "1700x1700",
+    "type": "image/png",
+    "purpose": "any maskable"
+  }
+],
+"screenshots": [
+  {
+    "src": "/Vehicle-inspection-V2/icon.png",
+    "sizes": "1700x1700",
+    "type": "image/png",
+    "label": "واجهة التطبيق"
+  }
+]
   "prefer_related_applications": false,
   "related_applications": [],
   "iarc_rating_id": ""

@@ -4191,9 +4191,11 @@ document.addEventListener('keydown', function(e) {
   <div id="editConfirmBox" style="background:var(--bg-card);border-radius:16px;padding:22px;max-width:420px;width:100%;border:1px solid var(--border);" onclick="event.stopPropagation()">
     <div id="editConfirmContent"></div>
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(reg => console.log("Service Worker Registered", reg))
+      .catch(err => console.log("Service Worker Failed", err));
   });
 }
 </script>

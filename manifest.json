@@ -1,43 +1,35 @@
 {
-  "id": "",
-  "name": "نظام إدارة خلاطات الأسمنت",
-  "short_name": "الخلاطات",
-  "description": "تطبيق لإدارة وفحص وتتبع خلاطات الأسمنت والمركبات والملاحظات والصور والتقارير حتى بدون إنترنت.",
-  "start_url": "/",
-  "scope": "/",
-  "display": "fullscreen",
-  "display_override": [
-    "window-controls-overlay",
-    "fullscreen",
-    "minimal-ui"
-  ],
-  "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#0f172a",
+  "id": "/Vehicle-inspection-V2",
+  "name": "فحص المركبات",
+  "short_name": "فحص",
+  "description": "تطبيق لفحص المركبات وتسجيل الملاحظات والصور والتقارير.",
+  "start_url": "/Vehicle-inspection-V2/",
+  "scope": "/Vehicle-inspection-V2/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "theme_color": "#0a1628",
+  "background_color": "#060d1a",
   "lang": "ar",
   "dir": "rtl",
-  "categories": [
-    "business",
-    "productivity",
-    "utilities"
-  ],
-"icons": [
-  {
-    "src": "/Vehicle-inspection-V2/icon.png",
-    "sizes": "1700x1700",
-    "type": "image/png",
-    "purpose": "any maskable"
-  }
-],
-"screenshots": [
-  {
-    "src": "/Vehicle-inspection-V2/icon.png",
-    "sizes": "1700x1700",
-    "type": "image/png",
-    "label": "واجهة التطبيق"
-  }
-]
+  "categories": ["business", "productivity", "utilities"],
   "prefer_related_applications": false,
   "related_applications": [],
-  "iarc_rating_id": ""
+  "iarc_rating_id": "",
+  "icons": [
+    {
+      "src": "/Vehicle-inspection-V2/icon.png",
+      "sizes": "1700x1700",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/Vehicle-inspection-V2/icon.png",
+      "sizes": "1700x1700",
+      "type": "image/png",
+      "label": "واجهة التطبيق"
+    }
+  ]
 }

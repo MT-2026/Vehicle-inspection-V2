@@ -11,7 +11,11 @@
   "background_color": "#060d1a",
   "lang": "ar",
   "dir": "rtl",
-  "categories": ["business", "productivity", "utilities"],
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
+  ],
   "prefer_related_applications": false,
   "icons": [
     {
